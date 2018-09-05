@@ -1,0 +1,20 @@
+一、问题描述
+新安装的MySQL5.7.22 或 8.0.11，在 Navicat 上执行删除操作时，遇到报错：
+[Err] 1055 - Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 'information_schema.PROFILING.SEQ' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with
+sql_mode=only_full_group_by
+
+
+二、问题解决
+1、 解决办法： 把 sql_mode中的 only_full_group_by 去掉即可。
+2、 办法一 （摘自 这里 只在当前查询页面有效，不能一次性解决问题！）：
+select version(), @@sql_mode;
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+3、办法二： 修改 my.cnf 文件的 sql_mode （一次性解决问题）
+查找 my.cnf 文件： find / -name my.cnf 或者 whereis my.cnf
+获取 sql_mode字段内容： SELECT @@sql_mode;
+去掉 sql_mode字段中的 only_full_group_by
+编辑 my.cnf： vim /etc/my.cnf 将上一步骤的 sql_mode 字段内容添加至 my.cnf
+保存，重启： service mysqld restart
+sql_mode 字段参考：
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
