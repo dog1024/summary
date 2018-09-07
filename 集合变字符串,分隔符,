@@ -1,0 +1,11 @@
+1.
+List<String> cities = Arrays.asList("Milan", 
+                                    "London", 
+                                    "New York", 
+                                    "San Francisco");
+String citiesCommaSeparated = String.join(",", cities);
+System.out.println(citiesCommaSeparated);
+
+2.
+String citiesCommaSeparated = cities.stream()
+                                    .collect(Collectors.joining(","));
